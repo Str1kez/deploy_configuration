@@ -1,0 +1,16 @@
+[Unit]
+Description=gunicorn daemon
+Requires=gunicorn.socket
+After=network.target
+
+[Service]
+User=<your_user>
+Group=www-data
+WorkingDirectory=<path_to_app>
+ExecStart=<path_to_app>/venv/bin/gunicorn --workers <2x cpu + 1> --bind unix:<path_to_app>/gunicorn/gunicorn.sock <app_name>.wsgi:application --access-logfile <path_to_app>/gunicorn/access.log --error-logfile <path_to_app>/gunicorn/error.log
+Restart=on-failure
+TimeoutStopSec=5
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target
